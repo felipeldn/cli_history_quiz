@@ -9,11 +9,6 @@ class User < ActiveRecord::Base
     end
 
     def unanswered_questions
-        Question.all.filter{|question| !self.question_ids.include?(question.id)}
+        Question.all.filter{|question| !self.questions.include?(question)}
     end
-
-    def question_ids
-        UserQuestion.all.filter{|user_question| user_question.user_id === self.id}.map{|user_question| user_question.question_id }
-    end
-
 end

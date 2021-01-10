@@ -1,5 +1,6 @@
 require 'pry'
 require 'colorize'
+# require 'catpix'
 
 class QuizCLI
 
@@ -9,8 +10,17 @@ class QuizCLI
     @new_question = nil
 
     def welcome_message
+        # Catpix::print_image "History-banner.jpg",
+        # :limit_x => 1.0,
+        # :limit_y => 0,
+        # :center_x => true,
+        # :center_y => true,
+        # :bg => "white",
+        # :bg_fill => true,
+        # :resolution => "low"
         puts "Welcome to History Quiz 101! Let's have some fun and take a trip through time!".bold
-    end
+        # binding.pry
+    end 
      
     def find_user
         new_user = PROMPT.select("Do you have an account with us?", %w(Yes No))
@@ -30,7 +40,7 @@ class QuizCLI
         @current_user = User.find_by(username: user_info[:username], password: user_info[:password])
         if @current_user.nil?
             puts "Invalid credentials!"
-            sleep 2
+            sleep(2)
             find_user
         else 
             puts "Login successful"
@@ -46,7 +56,7 @@ class QuizCLI
         end 
         @current_user = User.create(**user_attrs)
         puts "Thanks for signing up! Get ready for some time-travelling!".bold.blue
-        sleep 2
+        sleep(2)
         @current_user
     end 
 
@@ -113,30 +123,30 @@ class QuizCLI
             sleep(2)    
             puts "Or a history student?".bold.blue 
             sleep(2)
-            puts "Nice one, perfect #{@current_user.score}/10! See if you can replicate your score with a new set of questions and make sure to check out the high scores table.".bold.blue    
+            puts "Nice one, perfect #{@current_user.score}/10! As Caesar would say 'I came, I saw, I conquered'. See if you can replicate your score with a new set of questions and make sure to check out the high scores table.".bold.blue    
         end
     end
 
     def run_quiz
-        question_count = 0
+        question_count  = 0
         @current_user.score = 0
 
         while question_count < 10 do 
-    #Maybe I don't even need the string below if my #sleeps & answer.responses are are well placed
+    #Maybe I don't even need the string below if my #sleeps & #answer.responses are are well placed
           puts "Get ready for a question.".bold.red
-          sleep(1)
+          # sleep(1)
           random_question
             question_count += 1
-            @current_user_question = UserQuestion.create(user_id: @current_user.id, question_id: @new_question.id)
+            @current_user_question = UserQuestion.create(user_id: @current_user.id, question_id: @new_question.id, user_answer: @current_answer)
             if @current_answer == @new_question.correct_answer
                 puts @new_question.correct_answer_response
-                sleep(2)
+                # sleep(1)
                 @current_user.score += 1
                 @current_user.save
                 # binding.pry
             else
                 puts @new_question.wrong_answer_response
-                sleep(2)
+                # sleep(1)
             end
         end
         puts answer_responses
@@ -156,7 +166,7 @@ class QuizCLI
         delete_user = PROMPT.select("Are you sure?".bold.red, %w(Yes No))
         if delete_user == "Yes"
                 puts "Thanks for playing."
-                sleep(1)
+                # sleep(1)
                 puts "Your account has been deleted.".bold.red
                 @current_user.delete
                 sleep(2)
@@ -180,7 +190,7 @@ class QuizCLI
         quit_app = PROMPT.select("Are you sure?".bold.red, %w(Yes No))
         if quit_app == "Yes"
                 puts "Thank you for taking part in our quiz! Hope you enjoyed your trip through time!".bold.blue
-                sleep(1)
+                # sleep(1)
                 exit!
     
         elsif quit_app == "No" 

@@ -6,3 +6,6 @@ ActiveRecord::Base.logger = nil
 
 PROMPT = TTY::Prompt.new
 require_all 'lib'
+
+require "require_all"
+require_rel "../lib"
